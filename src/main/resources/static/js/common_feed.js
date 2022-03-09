@@ -8,14 +8,14 @@ function getDateTimeInfo(dt) {
     const diffSec = nowDtSec - targetDtSec;
     if(diffSec < 120) {
         return '1분 전';
-    } else if(diffSec < 3600) { //분 단위
+    } else if(diffSec < 3600) { //분 단위 (60 * 60)
         return `${parseInt(diffSec / 60)}분 전`;
-    } else if(diffSec < 86400) { //시간 단위
+    } else if(diffSec < 86400) { //시간 단위 (60 * 60 * 24)
         return `${parseInt(diffSec / 3600)}시간 전`;
-    } else if(diffSec < 604800) { //일 단위
+    } else if(diffSec < 2592000) { //일 단위 (60 * 60 * 24 * 30)
         return `${parseInt(diffSec / 86400)}일 전`;
     }
-    return targetDt.toLocaleString();
+    return targetDt.toLocaleString();//그냥 날짜
 }
 
 //프로필 화면으로 이동
@@ -38,7 +38,7 @@ const feedObj = {
         this.getFeedList(this.currentPage);
     },
     makeFeedList: function(data) {
-        if(data.length == 0) { return; }
+        if(data.length == 0) { return; }//갯수 0 이면 리턴
 
         for(let i=0; i<data.length; i++) {
             const item = data[i];
@@ -46,13 +46,13 @@ const feedObj = {
             const itemContainer = document.createElement('div');
             itemContainer.className = 'item mt-3 mb-3';
 
+            const regDtInfo = getDateTimeInfo(item.regdt);//1일전 같은거
+            const topDiv = document.createElement('div');
+            topDiv.className = 'd-flex flex-row ps-3 pe-3';
+
             // 글쓴이 정보 영역
             const imgTag = `<img src="/pic/profile/${item.iuser}/${item.mainimg}" class="pointer profile w30 h30" 
             onclick="moveToProfile(${item.iuser});" onerror="this.onerror=null; this.src='/img/defaultProfileImg.png'">`;
-
-            const regDtInfo = getDateTimeInfo(item.regdt);
-            const topDiv = document.createElement('div');
-            topDiv.className = 'd-flex flex-row ps-3 pe-3';
             topDiv.innerHTML = `
                 <div class="d-flex flex-column justify-content-center">${imgTag}</div>
                 <div class="p-3 flex-grow-1">
@@ -118,7 +118,7 @@ const feedObj = {
                                     favCntHiddenInput.value = favCnt + 1;
                                     break;
                             }
-                            favCntHiddenInput.dispatchEvent(new Event("change"));
+                            favCntHiddenInput.dispatchEvent(new Event("change"));//javascript 반응형
                         }
                     });
             });
@@ -195,7 +195,7 @@ const feedObj = {
             cmtInput.placeholder = '댓글을 입력하세요...';
             cmtInput.className = 'flex-grow-1 my_input back_color';
             cmtInput.addEventListener('keyup', (e) => {
-                if(e.key === 'Enter') {
+                if(e.key === 'Enter') {//엔터쳤을때 버튼 클릭한 효과
                     cmtBtn.click();
                 }
             });
@@ -290,7 +290,7 @@ const feedObj = {
         }, { passive: true });
     },
     getFeedList: function(page) {
-        this.showLoading();
+        this.showLoading();//로딩 보여지는 부분
 
         const param = {
             'page': page,
@@ -305,6 +305,7 @@ const feedObj = {
             console.log(myJson);
             this.itemLength = myJson.length;
             this.makeFeedList(myJson);
+            this.hideLoading();
         }, param);
 
     },
@@ -336,6 +337,6 @@ const feedObj = {
 
         return cmtItemContainerDiv;
     },
-    hideLoading: function() { this.loadingElem.classList.add('hide');},
-    showLoading: function() { this.loadingElem.classList.remove('hide'); }
+    hideLoading: function() { this.loadingElem.classList.add('display-none');},
+    showLoading: function() { this.loadingElem.classList.remove('display-none'); }
 }
