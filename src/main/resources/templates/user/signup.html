@@ -7,7 +7,7 @@
 
 <th:block layout:fragment="content">
     <h1>회원가입</h1>
-<!--보안-->
+
     <form th:action="@{signup}" method="post" th:object="${userEntity}">
         <div><input type="email" th:field="*{email}" placeholder="email" autofocus required></div>
         <div><input type="password" th:field="*{pw}" placeholder="password" required></div>

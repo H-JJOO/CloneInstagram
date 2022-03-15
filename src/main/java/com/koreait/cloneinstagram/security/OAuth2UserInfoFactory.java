@@ -3,7 +3,7 @@ package com.koreait.cloneinstagram.security;
 import com.koreait.cloneinstagram.security.model.*;
 
 import java.util.Map;
-//객체 생성 공장
+
 public class OAuth2UserInfoFactory {
                                                    //registrationId: google, facebook, kakao, naver
     public static OAuth2UserInfo getOAuth2UserInfo(String registrationId, Map<String, Object> attributes) {

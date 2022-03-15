@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-//로컬로그인
+
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -16,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserMapper mapper;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {//email 값 들어옴
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity param = new UserEntity();
         param.setEmail(email);
         param.setProvider(ProviderType.LOCAL.toString());

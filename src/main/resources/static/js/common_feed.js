@@ -15,7 +15,7 @@ function getDateTimeInfo(dt) {
     } else if(diffSec < 2592000) { //일 단위 (60 * 60 * 24 * 30)
         return `${parseInt(diffSec / 86400)}일 전`;
     }
-    return targetDt.toLocaleString();//그냥 날짜
+    return targetDt.toLocaleString();
 }
 
 //프로필 화면으로 이동
@@ -38,7 +38,7 @@ const feedObj = {
         this.getFeedList(this.currentPage);
     },
     makeFeedList: function(data) {
-        if(data.length == 0) { return; }//갯수 0 이면 리턴
+        if(data.length == 0) { return; }
 
         for(let i=0; i<data.length; i++) {
             const item = data[i];
@@ -46,7 +46,7 @@ const feedObj = {
             const itemContainer = document.createElement('div');
             itemContainer.className = 'item mt-3 mb-3';
 
-            const regDtInfo = getDateTimeInfo(item.regdt);//1일전 같은거
+            const regDtInfo = getDateTimeInfo(item.regdt);
             const topDiv = document.createElement('div');
             topDiv.className = 'd-flex flex-row ps-3 pe-3';
 
@@ -89,11 +89,12 @@ const feedObj = {
             itemContainer.append(topDiv);
             itemContainer.append(imgSwiperDiv);
 
-            //좋아요 영역
+            //좋아요, dm 영역
             const btnsDiv = document.createElement('div');
-            btnsDiv.className = 'favCont p-2';
+            btnsDiv.className = 'favCont p-2 d-flex flex-row';
+
             const heartIcon = document.createElement('i');
-            heartIcon.className = 'fa-heart pointer rem1_2';
+            heartIcon.className = 'fa-heart pointer rem1_2 me-3';
             if(item.isFav === 1) { //좋아요 O
                 heartIcon.classList.add('fas');
             } else { //좋아요 X
@@ -118,11 +119,21 @@ const feedObj = {
                                     favCntHiddenInput.value = favCnt + 1;
                                     break;
                             }
-                            favCntHiddenInput.dispatchEvent(new Event("change"));//javascript 반응형
+                            //일부로 이벤트 발생!!!!
+                            favCntHiddenInput.dispatchEvent(new Event("change"));
                         }
                     });
             });
+
+            const dmDiv = document.createElement('div');
+            dmDiv.className = 'pointer';
+            dmDiv.addEventListener('click', ()=> {
+               location.href=`/dm?oppoiuser=${item.iuser}`;
+            });
+            dmDiv.innerHTML = `<svg aria-label="게시물 공유" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2" x1="22" x2="9.218" y1="3" y2="10.083"></line><polygon fill="none" points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334" stroke="currentColor" stroke-linejoin="round" stroke-width="2"></polygon></svg>`;
+
             btnsDiv.append(heartIcon);
+            btnsDiv.append(dmDiv);
             itemContainer.append(btnsDiv);
 
             const favDiv = document.createElement('div');
@@ -185,17 +196,14 @@ const feedObj = {
                 moreCmtDiv.append(moreCmtSpan);
                 cmtDiv.append(moreCmtDiv);
             }
-
-
             cmtDiv.append(cmtFormDiv);
-
 
             const cmtInput = document.createElement('input');
             cmtInput.type = 'text';
             cmtInput.placeholder = '댓글을 입력하세요...';
             cmtInput.className = 'flex-grow-1 my_input back_color';
             cmtInput.addEventListener('keyup', (e) => {
-                if(e.key === 'Enter') {//엔터쳤을때 버튼 클릭한 효과
+                if(e.key === 'Enter') {
                     cmtBtn.click();
                 }
             });
@@ -290,7 +298,7 @@ const feedObj = {
         }, { passive: true });
     },
     getFeedList: function(page) {
-        this.showLoading();//로딩 보여지는 부분
+        this.showLoading();
 
         const param = {
             'page': page,
